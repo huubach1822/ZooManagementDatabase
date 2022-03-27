@@ -1,6 +1,6 @@
 create database ZooManagement
 go
-
+use ZooManagement
 create table Animal
 (
 	ID int not null,
@@ -21,3 +21,4 @@ create table Animal
 	constraint pk_ID primary key(ID),
 
 )
+-- Viet anh comment
