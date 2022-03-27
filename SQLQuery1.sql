@@ -1,6 +1,8 @@
 create database ZooManagement
 go
 
+use ZooManagement
+
 create table Animal
 (
 	ID int not null,
