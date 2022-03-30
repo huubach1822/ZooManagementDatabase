@@ -7,8 +7,24 @@ create table Species
 (
 	ID int not null,
 	Species_name nvarchar(50),
-	Note nvarchar(50),
+	Note nvarchar(100),
 	constraint pk_Species primary key(ID)
+)
+
+create table TypeOfBirth
+(
+	ID int not null,
+	Name_Birth nvarchar(50),
+	Note nvarchar(100),
+	constraint pk_TypeOfBirth primary key(ID)
+)
+
+create table Origin
+(
+	ID int not null,
+	Birth_type_name nvarchar(50),
+	Note nvarchar(100),
+	constraint pk_Origin primary key(ID)
 )
 
 create table Animal
@@ -20,10 +36,10 @@ create table Animal
 	Red_list bit,
 	Sciene_name nvarchar(50),
 	English_name nvarchar(50),
-	Type_of_birth nvarchar(50),
+	TypeOfBirth_ID int,
 	Gender bit,
 	Date_of_joint datetime,
-	Origin nvarchar(50),
+	Origin_ID int,
 	Feature nvarchar(50),
 	Date_of_birth datetime,
 	Picture nvarchar(50),
@@ -31,16 +47,21 @@ create table Animal
 	constraint pk_Animal primary key(ID),
 	constraint fk_Animal_SpeciesID
 		foreign key(Species_ID)
-		references Species(ID)
-
+		references Species(ID),
+	constraint fk_Animal_TypeOfBirthID
+		foreign key(TypeOfBirth_ID)
+		references TypeOfBirth(ID),
+	constraint fk_Animal_OriginID
+		foreign key(Origin_ID)
+		references Origin(ID)
 )
 
-create table Incident
+create table Accident
 (
 	ID int not null,
-	Incident_name nvarchar(50),
-	Note nvarchar(50),
-	constraint pk_Incident primary key(ID)
+	Accident_name nvarchar(50),
+	Note nvarchar(100),
+	constraint pk_Accident primary key(ID)
 )
 
 create table Food
@@ -59,7 +80,7 @@ create table Employee
 	Date_of_birth datetime,
 	Gender bit,
 	Employee_Address nvarchar(50),
-	Phone int,
+	Phone nvarchar(50),
 	constraint pk_Employee primary key(ID)
 )
 
@@ -72,7 +93,16 @@ create table Animal_Food
 	Amount_of_lunch int,
 	Dinner_ID int,
 	Amount_of_dinner int,
-	constraint pk_AnimalFood primary key(ID)
+	constraint pk_AnimalFood primary key(ID),
+	constraint fk_Animal_BreakfastID
+		foreign key(Breakfast_ID)
+		references Food(ID),
+	constraint fk_Animal_LunchID
+		foreign key(Lunch_ID)
+		references Food(ID),
+	constraint fk_Animal_DinnerID
+		foreign key(Dinner_ID)
+		references Food(ID)
 )
 
 create table Food_Price
@@ -91,7 +121,7 @@ create table Reason
 (
 	ID int not null,
 	Reason_name nvarchar(50),
-	Note nvarchar(50),
+	Note nvarchar(100),
 	constraint pk_Reason primary key(ID)
 )
 
@@ -99,7 +129,7 @@ create table Fix
 (
 	ID int not null,
 	Fix_name nvarchar(50),
-	Note nvarchar(50),
+	Note nvarchar(100),
 	constraint pk_Fix primary key(ID)
 )
 
@@ -107,7 +137,7 @@ create table Condition
 (
 	ID int not null,
 	Condition_name nvarchar(50),
-	Note nvarchar(50),
+	Note nvarchar(100),
 	constraint pk_Condition primary key(ID)
 )
 
@@ -115,7 +145,7 @@ create table Area
 (
 	ID int not null,
 	Area_name nvarchar(50),
-	Note nvarchar(50),
+	Note nvarchar(100),
 	constraint pk_Area primary key(ID)
 )
 
@@ -126,33 +156,25 @@ create table Countryside
 	constraint pk_Countryside primary key(ID)
 )
 
-create table Origin
+create table Animal_Accident
 (
-	ID int not null,
-	Birth_type_name nvarchar(50),
-	Note nvarchar(50),
-	constraint pk_Origin primary key(ID)
-)
-
-create table Animal_Incident
-(
-	Incident_ID int not null,
+	Accident_ID int not null,
 	Animal_ID int not null,
 	Start_day datetime,
 	Reason_ID int,
 	Fix_ID int,
 	End_day datetime,
-	constraint pk_AnimalIncident primary key(Incident_ID,Animal_ID),
-	constraint fk_AnimalIncident_IncidentID 
-		foreign key(Incident_ID)
-		references Incident(ID),
-	constraint fk_AnimalIncident_AnimalID 
+	constraint pk_AnimalAccident primary key(Accident_ID,Animal_ID),
+	constraint fk_AnimalAccident_AccidentID 
+		foreign key(Accident_ID)
+		references Accident(ID),
+	constraint fk_AnimalAccident_AnimalID 
 		foreign key(Animal_ID)
 		references Animal(ID),
-	constraint fk_AnimalIncident_ReasonID 
+	constraint fk_AnimalAccident_ReasonID 
 		foreign key(Reason_ID)
 		references Reason(ID),
-	constraint fk_AnimalIncident_FixID 
+	constraint fk_AnimalAccident_FixID 
 		foreign key(Fix_ID)
 		references Fix(ID)
 )
@@ -164,10 +186,10 @@ create table Cage
 	Area_ID int,
 	Cage_area int,
 	Height int,
-	Capacity int,
+	Capacity int default(0),
 	Condition_ID int,
-	Employee nvarchar(50),
-	Note nvarchar(50),
+	Employee_ID int,
+	Note nvarchar(100),
 	constraint pk_Cage primary key(ID),
 	constraint fk_Cage_SpeciesID 
 		foreign key(Species_ID)
@@ -177,7 +199,10 @@ create table Cage
 		references Area(ID),
 	constraint fk_Cage_ConditionID 
 		foreign key(Condition_ID)
-		references Condition(ID)
+		references Condition(ID),
+	constraint fk_Animal_EmployeeID
+		foreign key(Employee_ID)
+		references Employee(ID)
 )
 
 create table Animal_Cage
@@ -195,10 +220,3 @@ create table Animal_Cage
 		references Species(ID)
 )
 
-create table TypeOfBirth
-(
-	ID int not null,
-	Name_Birth nvarchar(50),
-	Note nvarchar(50),
-	constraint pk_TypeOfBirth primary key(ID)
-)
