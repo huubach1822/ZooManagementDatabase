@@ -220,3 +220,7 @@ create table Animal_Cage
 		references Species(ID)
 )
 
+use ZooManagement
+alter table Employee
+add Password nvarchar(50)
+
