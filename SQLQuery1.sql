@@ -232,3 +232,33 @@ add constraint fk_AnimalFood_AnimalID
 	foreign key(Animal_ID)
 	references Animal(ID)
 
+drop table Animal
+
+create table Animal
+(
+	ID int IDENTITY(1,1) not null,
+	Vietnamese_name nvarchar(50),
+	Species_ID int,
+	Quantity int,
+	Red_list bit,
+	Sciene_name nvarchar(50),
+	English_name nvarchar(50),
+	TypeOfBirth_ID int,
+	Gender bit,
+	Date_of_joint datetime,
+	Origin_ID int,
+	Feature nvarchar(50),
+	Date_of_birth datetime,
+	Picture nvarchar(50),
+	Age int,
+	constraint pk_Animal primary key(ID),
+	constraint fk_Animal_SpeciesID
+		foreign key(Species_ID)
+		references Species(ID),
+	constraint fk_Animal_TypeOfBirthID
+		foreign key(TypeOfBirth_ID)
+		references TypeOfBirth(ID),
+	constraint fk_Animal_OriginID
+		foreign key(Origin_ID)
+		references Origin(ID)
+)
