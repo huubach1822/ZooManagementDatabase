@@ -224,3 +224,11 @@ use ZooManagement
 alter table Employee
 add Password nvarchar(50)
 
+--Sua bang Animal_Food
+use ZooManagement
+exec sp_rename  'Animal_Food.ID', 'Animal_ID', 'COLUMN';
+alter table Animal_Food
+add constraint fk_AnimalFood_AnimalID
+	foreign key(Animal_ID)
+	references Animal(ID)
+
