@@ -5,7 +5,7 @@ use ZooManagement
 
 create table Species
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Species_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Species primary key(ID)
@@ -13,7 +13,7 @@ create table Species
 
 create table TypeOfBirth
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Name_Birth nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_TypeOfBirth primary key(ID)
@@ -21,7 +21,7 @@ create table TypeOfBirth
 
 create table Origin
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Birth_type_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Origin primary key(ID)
@@ -29,7 +29,7 @@ create table Origin
 
 create table Animal
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Vietnamese_name nvarchar(50),
 	Species_ID int,
 	Quantity int,
@@ -58,7 +58,7 @@ create table Animal
 
 create table Accident
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Accident_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Accident primary key(ID)
@@ -66,7 +66,7 @@ create table Accident
 
 create table Food
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Food_name nvarchar(50),
 	Uses nvarchar(50),
 	Unit int,
@@ -75,25 +75,26 @@ create table Food
 
 create table Employee
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Employee_name nvarchar(50),
 	Date_of_birth datetime,
 	Gender bit,
 	Employee_Address nvarchar(50),
 	Phone nvarchar(50),
+	Password nvarchar(50),
 	constraint pk_Employee primary key(ID)
 )
 
 create table Animal_Food
 (
-	ID int not null,
+	Animal_ID int not null,
 	Breakfast_ID int,
 	Amount_of_breakfast int,
 	Lunch_ID int,
 	Amount_of_lunch int,
 	Dinner_ID int,
 	Amount_of_dinner int,
-	constraint pk_AnimalFood primary key(ID),
+	constraint pk_AnimalFood primary key(Animal_ID),
 	constraint fk_Animal_BreakfastID
 		foreign key(Breakfast_ID)
 		references Food(ID),
@@ -102,12 +103,15 @@ create table Animal_Food
 		references Food(ID),
 	constraint fk_Animal_DinnerID
 		foreign key(Dinner_ID)
-		references Food(ID)
+		references Food(ID),
+	constraint fk_AnimalFood_AnimalID
+		foreign key(Animal_ID)
+		references Animal(ID)
 )
 
 create table Food_Price
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Food_ID int,
 	Price int,
 	Applied_date datetime,
@@ -119,7 +123,7 @@ create table Food_Price
 
 create table Reason
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Reason_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Reason primary key(ID)
@@ -127,7 +131,7 @@ create table Reason
 
 create table Fix
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Fix_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Fix primary key(ID)
@@ -135,7 +139,7 @@ create table Fix
 
 create table Condition
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Condition_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Condition primary key(ID)
@@ -143,7 +147,7 @@ create table Condition
 
 create table Area
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Area_name nvarchar(50),
 	Note nvarchar(100),
 	constraint pk_Area primary key(ID)
@@ -151,7 +155,7 @@ create table Area
 
 create table Countryside
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Countryside_name nvarchar(50),
 	constraint pk_Countryside primary key(ID)
 )
@@ -181,7 +185,7 @@ create table Animal_Accident
 
 create table Cage 
 (
-	ID int not null,
+	ID int IDENTITY(1,1) not null,
 	Species_ID int,
 	Area_ID int,
 	Cage_area int,
@@ -218,73 +222,4 @@ create table Animal_Cage
 	constraint fk_AnimalCage_SpeciesID 
 		foreign key(Species_ID)
 		references Species(ID)
-)
-
-use ZooManagement
-alter table Employee
-add Password nvarchar(50)
-
---Sua bang Animal_Food
-use ZooManagement
-exec sp_rename  'Animal_Food.ID', 'Animal_ID', 'COLUMN';
-alter table Animal_Food
-add constraint fk_AnimalFood_AnimalID
-	foreign key(Animal_ID)
-	references Animal(ID)
-
-drop table Animal
-
-create table Animal
-(
-	ID int IDENTITY(1,1) not null,
-	Vietnamese_name nvarchar(50),
-	Species_ID int,
-	Quantity int,
-	Red_list bit,
-	Sciene_name nvarchar(50),
-	English_name nvarchar(50),
-	TypeOfBirth_ID int,
-	Gender bit,
-	Date_of_joint datetime,
-	Origin_ID int,
-	Feature nvarchar(50),
-	Date_of_birth datetime,
-	Picture nvarchar(50),
-	Age int,
-	constraint pk_Animal primary key(ID),
-	constraint fk_Animal_SpeciesID
-		foreign key(Species_ID)
-		references Species(ID),
-	constraint fk_Animal_TypeOfBirthID
-		foreign key(TypeOfBirth_ID)
-		references TypeOfBirth(ID),
-	constraint fk_Animal_OriginID
-		foreign key(Origin_ID)
-		references Origin(ID)
-)
-
-drop table Animal_Food
-
-create table Animal_Food
-(
-	Animal_ID int not null,
-	Breakfast_ID int,
-	Amount_of_breakfast int,
-	Lunch_ID int,
-	Amount_of_lunch int,
-	Dinner_ID int,
-	Amount_of_dinner int,
-	constraint pk_AnimalFood primary key(ID),
-	constraint fk_Animal_BreakfastID
-		foreign key(Breakfast_ID)
-		references Food(ID),
-	constraint fk_Animal_LunchID
-		foreign key(Lunch_ID)
-		references Food(ID),
-	constraint fk_Animal_DinnerID
-		foreign key(Dinner_ID)
-		references Food(ID),
-	constraint fk_AnimalFood_AnimalID
-		foreign key(Animal_ID)
-		references Animal(ID)
 )
