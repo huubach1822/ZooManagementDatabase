@@ -223,3 +223,17 @@ create table Animal_Cage
 		foreign key(Species_ID)
 		references Species(ID)
 )
+
+--Sua Bang Animal_Cage
+use ZooManagement
+alter table Animal_Cage
+drop constraint fk_AnimalCage_SpeciesID 
+
+exec sp_rename 'Animal_Cage.Species_ID', 'Animal_ID', 'COLUMN'
+
+alter table Animal_Cage
+add constraint fk_AnimalCage_AnimalID 
+		foreign key(Animal_ID)
+		references Animal(ID)
+
+select * from Animal_Cage
