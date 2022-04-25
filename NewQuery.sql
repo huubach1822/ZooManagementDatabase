@@ -237,3 +237,11 @@ add constraint fk_AnimalCage_AnimalID
 		references Animal(ID)
 
 select * from Animal_Cage
+
+alter table Animal_Food
+	add Start_day datetime
+
+alter table Animal_Food
+	add End_day datetime
+
+select * from Animal_Food
